@@ -1,14 +1,14 @@
 
 .background path {
   fill: none;
-  stroke: lightgray;
+  /*stroke: lightgray;*/
   stroke-width: 0.5px;
   pointer-events: stroke;
 }
 
 .foreground path {
   fill: none;
-  stroke: steelblue;
+  /*stroke: steelblue;*/
   stroke-width: 0.5px;
 }
 .dot {

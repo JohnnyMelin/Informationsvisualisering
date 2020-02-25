@@ -46,7 +46,7 @@ function pc(dota){
             },
             {
                   name: "successRate",
-                  scale: d3.scale.log().range([height,0]),
+                  scale: d3.scale.linear().range([height,0]),
                   type: "number",
 
             },
@@ -104,6 +104,7 @@ function pc(dota){
       // Add grey background lines for context.
       background = svg.append("g")
       .attr("class", "background")
+      .style("stroke", "lightgray")
       .selectAll("path")
       .data(data)
       .enter().append("path")
@@ -112,10 +113,28 @@ function pc(dota){
       // Add blue foreground lines for focus.
       foreground = svg.append("g")
       .attr("class", "foreground")
+      .style("stroke", "steelblue")
       .selectAll("path")
       .data(data)
       .enter().append("path")
       .attr("d", path);
+
+      var detailOnCommand = svg.selectAll(".foreground path")
+      .on("mouseover", function() {
+            var self = d3.select(this)
+            var c = self.attr("class", "hover")
+                        .style("stroke","red")
+                        .style("stroke-width", "2px")
+
+            })
+      .on("mouseout", function() {
+            var self = d3.select(this)
+            var c = self.attr("class", "path")
+                        .style("stroke","steelblue")
+                        .style("stroke-width", "0.5px")
+      })
+      .on("click", function() {alert("click")})
+
 
       // Add a group element for each dimension.
       var g = svg.selectAll(".dimension")
@@ -185,7 +204,7 @@ function pc(dota){
 
       // Returns the path for a given data point.
       function path(d) {
-            console.log(d)
+            //console.log(d)
             //return line(dimensions.map(function(p) { return [position(p), y[p](d[p])]; }));
             return line(dimensions.map(function(dimension) {
                   var v = dragging[dimension.name];

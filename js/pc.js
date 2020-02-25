@@ -28,7 +28,7 @@ function pc(dota){
                   scale: d3.scale.ordinal().rangePoints([0, height]),
                   type: "string"
             },
-            {
+            /*{
                   name: "deadline",
                   scale: d3.scale.ordinal().rangePoints([0, height]),
                   type: "string"
@@ -37,7 +37,7 @@ function pc(dota){
                   name: "launched",
                   scale: d3.scale.ordinal().rangePoints([0, height]),
                   type: "string"
-            },
+            },*/
             {
                   name: "dateRange",
                   scale: d3.scale.linear().range([height,0]),
@@ -103,21 +103,27 @@ function pc(dota){
 
       // Add grey background lines for context.
       background = svg.append("g")
-      .attr("class", "background")
-      .style("stroke", "lightgray")
-      .selectAll("path")
-      .data(data)
-      .enter().append("path")
-      .attr("d", path);
+            .attr("class", "background")
+            .style("stroke", "lightgray")
+            .selectAll("path")
+            .data(data)
+            .enter().append("path")
+            .attr("d", path);
 
       // Add blue foreground lines for focus.
       foreground = svg.append("g")
-      .attr("class", "foreground")
-      .style("stroke", "steelblue")
-      .selectAll("path")
-      .data(data)
-      .enter().append("path")
-      .attr("d", path);
+            .attr("class", "foreground")
+            .style("stroke", "steelblue")
+            .selectAll("path")
+            .data(data)
+            .enter().append("path")
+            .attr("d", path);
+
+      var details = d3.select("body").append("svg")
+            .attr("class", "detailOnDemand")
+            .attr("width", 1000)
+            .attr("height", 1000)
+            .style("background-color", "red")
 
       var detailOnCommand = svg.selectAll(".foreground path")
       .on("mouseover", function() {
@@ -132,8 +138,11 @@ function pc(dota){
             var c = self.attr("class", "path")
                         .style("stroke","steelblue")
                         .style("stroke-width", "0.5px")
-      })
-      .on("click", function() {alert("click")})
+            })
+      .on("click", function() {
+            var self = d3.select(this)
+            var dede = self[0][0].__data__ // This is an array containting the clicked elements data entry
+            })
 
 
       // Add a group element for each dimension.

@@ -140,29 +140,35 @@ div.tooltip {
 }
 
       svg {
-      font: 10px sans-serif;
+            font: 10px sans-serif;
       }
 
       svg .countries {
-        fill: green;
-        stroke: black;
-        stroke-width: 0.5px;
+            fill: green;
+            stroke: black;
+            stroke-width: 0.5px;
       }
 
       svg .ignore {
-        fill: black;
+            fill: black;
       }
       svg .countries:hover{
-          fill: lightgreen;
-          stroke: black;
+           fill: lightgreen;
+           stroke: black;
       }
 
       svg .countries:active{
-        fill: red;
+            fill: red;
       }
 
       svg .globe {
-        fill: steelblue;
+            fill: steelblue;
+      }
+
+      svg .detailOnDemand {
+            width: 1000;
+            height:1000;
+            fill: green;
       }
 
 

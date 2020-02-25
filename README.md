@@ -1,2 +1,2 @@
 # Informationsvisualisering
-TNM048 - Inofvis med focus på kickstarter
+TNM048 - Inofvis med fokus på kickstarter

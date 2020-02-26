@@ -1,7 +1,7 @@
 /**
- * @Created Feb 25, 2019
- * @LastUpdate Feb 25, 2019
- * @author Johnny Melin
+ * @Created Feb 18, 2020
+ * @LastUpdate
+ * @author Johnny Melin, Oscar Ullberg, Martin Marklund
  */
 queue()
   .defer(d3.csv,'data/ks-projects-201612.csv')
@@ -9,7 +9,7 @@ queue()
   .defer(d3.csv,'data/test.csv')
   .await(draw);
 
-var pc, world_map, points;
+var ps, pc, world_map, points;
 
 function draw(error, data1, data2, data3) {
     if (error) throw error;
@@ -20,9 +20,10 @@ function draw(error, data1, data2, data3) {
       arr.push(data2[i]);
     }
 
-    var parsedData = parseData(arr); // parse the data so we have no incomplete items.
+  var parsedData = parseData(arr); // parse the data so we have no incomplete items.
   //Test different data at the end!
   pc = new pc(parsedData);
+  ps = new ps(parsedData);
   console.log("Code Ends");
 }
 

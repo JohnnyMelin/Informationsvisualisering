@@ -1,5 +1,5 @@
 /**
-* @Created Feb 25, 2019
+* @Created Feb 18, 2020
 * @LastUpdate ...
 * @author Johnny Melin, Oscar Ullberg, Martin Marklund
 */
@@ -121,8 +121,8 @@ function pc(dota){
 
       var details = d3.select("body").append("svg")
             .attr("class", "detailOnDemand")
-            .attr("width", 1000)
-            .attr("height", 1000)
+            .attr("width", 100)
+            .attr("height", 100)
             .style("background-color", "red")
 
       var detailOnCommand = svg.selectAll(".foreground path")

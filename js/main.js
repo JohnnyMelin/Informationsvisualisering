@@ -9,13 +9,13 @@ queue()
   .defer(d3.csv,'data/test.csv')
   .await(draw);
 
-var ps, pc, world_map, points;
+var pss, pc, world_map, points;
 
 function draw(error, data1, data2, data3) {
     if (error) throw error;
     console.log("Code Starts");
     var arr = [];
-    for(var i = 0; i < 100; ++i){
+    for(var i = 1000; i < 1010; ++i){
       //console.log(data2[i]);
       arr.push(data2[i]);
     }
@@ -23,7 +23,7 @@ function draw(error, data1, data2, data3) {
   var parsedData = parseData(arr); // parse the data so we have no incomplete items.
   //Test different data at the end!
   pc = new pc(parsedData);
-  ps = new ps(parsedData);
+  //pss = new pss(parsedData);
   console.log("Code Ends");
 }
 
@@ -50,7 +50,7 @@ function parseData(data){
     var bool = true;
     var item = data[i];
     for (var j in item){
-      if(item[j] === ""){
+      if(item[j] === "" || typeof item[j] === "undefined"){
         bool = false;
       }
     }
@@ -59,7 +59,7 @@ function parseData(data){
           test = getSuccess(item);
       arr.push({
         backers: item.backers,
-        category: item.caregory,
+        category: item.category,
         country: item.country,
         currency: item.currency,
         deadline: item.deadline,

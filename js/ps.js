@@ -15,7 +15,7 @@
 
 function ps(data){
 
-chart = {
+
   const svg = d3.create("svg")
       .attr("viewBox", [0, 0, width, height]);
 
@@ -63,8 +63,8 @@ chart = {
       .attr("fill-opacity", 0.7)
       .text(d => ` ${d.value.toLocaleString()}`); //Kan behöva skrivas om
 
-  return svg.node();
-}
+
+
 
 width = 975
 

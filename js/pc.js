@@ -23,12 +23,13 @@ function pc(dota){
 
       // Create dimensions for each axis
       var dimensions = [
+        /*{
             {
                   name: "main_category",
                   scale: d3.scale.ordinal().rangePoints([0, height]),
                   type: "string"
+
             },
-            /*{
                   name: "deadline",
                   scale: d3.scale.ordinal().rangePoints([0, height]),
                   type: "string"
@@ -37,18 +38,28 @@ function pc(dota){
                   name: "launched",
                   scale: d3.scale.ordinal().rangePoints([0, height]),
                   type: "string"
-            },*/
+            },
+
+            {
+                  name: "state",
+                  scale: d3.scale.ordinal().rangePoints([0, height]),
+                  type: "string"
+            },
+            {
+                  name: "country",
+                  scale: d3.scale.ordinal().rangePoints([0, height]),
+                  type: "string"
+            },
+            */
             {
                   name: "dateRange",
                   scale: d3.scale.linear().range([height,0]),
                   type: "number",
-
             },
             {
                   name: "successRate",
                   scale: d3.scale.linear().range([height,0]),
                   type: "number",
-
             },
             {
                   name: "pledged",
@@ -56,19 +67,9 @@ function pc(dota){
                   type: "number"
             },
             {
-                  name: "state",
-                  scale: d3.scale.ordinal().rangePoints([0, height]),
-                  type: "string"
-            },
-            {
                   name: "backers",
                   scale: d3.scale.linear().range([height, 0]),
                   type: "number"
-            },
-            {
-                  name: "country",
-                  scale: d3.scale.ordinal().rangePoints([0, height]),
-                  type: "string"
             },
             {
                   name: "usd_goal_real",
@@ -119,11 +120,13 @@ function pc(dota){
             .enter().append("path")
             .attr("d", path);
 
-      var details = d3.select("body").append("svg")
+      var details = d3.select("body").append("div")
             .attr("class", "detailOnDemand")
             .attr("width", 100)
             .attr("height", 100)
-            .style("background-color", "red")
+            .attr("font-weight", 3)
+            .attr("id", "detailbox")
+
 
       var detailOnCommand = svg.selectAll(".foreground path")
       .on("mouseover", function() {
@@ -142,6 +145,21 @@ function pc(dota){
       .on("click", function() {
             var self = d3.select(this)
             var dede = self[0][0].__data__ // This is an array containting the clicked elements data entry
+            var textbox = document.getElementById('detailbox');
+            console.log(dede.usd_goal_real)
+            console.log(dede)
+            textbox.innerHTML = "Name:              " + dede.name + "<br />"
+                              + "Country of Origin: " + dede.country + "<br />"
+                              + "Main Category:     " + dede.main_category + "<br />"
+                              + "Sub Category:      " + dede.category + "<br />"
+                              + "Launch date:       " + dede.launched + "<br />"
+                              + "Deadline:          " + dede.deadline + "<br />"
+                              + "Days active:       " + dede.dateRange + " days" + "<br />"
+                              + "Current State:     " + dede.state + "<br />"
+                              + "Backers:           " + dede.backers + "<br />"
+                              + "Pledged:           " + dede.usd_pledged_real + "$" + "<br />"
+                              + "Goal:              " + dede.usd_goal_real + "$" + "<br />"
+                              + "Success Rate:      " + dede.successRate + "%";
             })
 
 

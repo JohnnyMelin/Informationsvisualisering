@@ -23,7 +23,7 @@ function draw(error, data1, data2, data3) {
   var parsedData = parseData(arr); // parse the data so we have no incomplete items.
   //Test different data at the end!
   pc = new pc(parsedData);
-  //pss = new pss(parsedData);
+  pss = new pss(parsedData);
   console.log("Code Ends");
 }
 

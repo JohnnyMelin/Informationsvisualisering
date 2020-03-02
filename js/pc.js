@@ -15,7 +15,7 @@ function pc(dota){
       var happyDims = ['main_category','launched','deadline','state','backers','country', 'usd_goal_real', 'usd_pledged_real'];
 
       var data = dota;
-      var div = '#pc-chart';
+      var div = '#parcoord';
       var parentWidth = $(div).parent().width();
       var margin = {top: 50, right: 50, bottom: 50, left: 50},
       width = 960 - margin.left - margin.right,
@@ -87,7 +87,7 @@ function pc(dota){
       background,
       foreground;
 
-      var svg = d3.select("body").append("svg")
+      var svg = d3.select("div").append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
       .append("g")

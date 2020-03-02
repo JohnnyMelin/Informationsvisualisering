@@ -1,75 +1,131 @@
-function world(dota)
-{
-    var div = '#world_map';
-    var parentWidth = $(div).parent().width();
-    var parentHeight = $(div).parent().height();
-    var margin = { top: 40, right: 10, bottom: 10, left: 30 },
-        width = parentWidth - margin.left - margin.right,
-        height = parentHeight  - margin.top - margin.bottom;
-
-    var svg = d3.select(div)
-      .append("svg")
-        .attr("width", width)
-        .attr("height", height + margin.top + margin.bottom)
-
-    const projection =  d3.geoNaturalEarth1();
-    const pathGenerator = d3.geoPath().projection(projection);
-    const data = dota;
-
-    const h = svg.append('g');
-
-    h.append('path')
-      .attr("class","globe")
-      .attr('d', pathGenerator({type: "Sphere"}));
-
-    svg.call(d3.zoom().scaleExtent([1/2,4]).on('zoom', () => {
-        return h.attr("transform", d3.event.transform);
-    }));
-
-
-    d3.tsv('https://unpkg.com/world-atlas@1.1.4/world/50m.tsv' , function(tsv){
-        d3.json('https://unpkg.com/world-atlas@1.1.4/world/50m.json', function(json) {
-              const countries = topojson.feature(json, json.objects.countries)
-              const countryName = {}; // generate a lookup table for country name based on country ID
-              tsv.forEach(d => {
-                countryName[d.iso_n3] = d.name; // attach the country name in the tsv to the country ID in the json.
-              });
-
-              const country_w_data = [];  // create a list of countries that we have in the data set.
-              data.forEach(d => {
-                for(var i in countryName){
-                  if(d.country === countryName[i]){
-                    if(!country_w_data.includes(d.country)){
-                      country_w_data.push(d.country);
-                    }
-                    break;
-                  }
-                }
-              });
-
-              const paths = h.selectAll('path')
-                  .data(countries.features);
-              paths.enter().append('path')
-                .attr("class",d => {
-                    if(country_w_data.includes(countryName[d.id])){
-                      return 'countries';
-                    }
-                    return 'ignore';
-                  })
-                .attr('d', d => pathGenerator(d))
-                .on('click', d => {
-                  console.log(countryName[d.id])
-                })
-              .append('title')
-                .text(d => countryName[d.id]);
-
-              const country = d3.selectAll('path')
-
-
-
-
-
-        });  // END of d3.json
-    }); // END of d3.tsv
-
-} // End of world
+var map = new Datamap(
+  {
+    scope: 'world',
+    element: document.getElementById('map-container'),
+    // Fills define the range of data, they will have to be mapped to our data.
+    fills: {
+      HIGH: '#fee8c8',
+      LOW: '#fee8c8',
+      MEDIUM: '#fdbb84',
+      UNKNOWN: 'rgb(0,0,0)',
+      defaultFill: 'gray'
+    },
+    data: {
+      /*
+        AUS: Australia
+        AUT: Austria
+        BEL: Belgium
+        CAN: Canada
+        DNK: Denmark
+        FRA: France
+        DEU: Germany
+        HKG: Hong Kong
+        IRL: Ireland
+        ITA: Italy
+        JPN: Japan
+        LUX: Luxembourg
+        MEX: Mexico
+        NZL: New Zealand
+        NOR: Norway
+        ESP: Spain
+        SWE: Sweden
+        CHE: Switzerland
+        NLD: the Netherlands
+        GBR: the United Kingdom
+        USA: the United States
+      */
+      AUS: {
+        fillKey: 'MEDIUM',
+        numberOfThings: 10381
+      },
+      AUT: {
+        fillKey: 'MEDIUM',
+        numberOfThings: 10381
+      },
+      BEL: {
+        fillKey: 'MEDIUM',
+        numberOfThings: 10381
+      },
+      CAN: {
+        fillKey: 'MEDIUM',
+        numberOfThings: 10381
+      },
+      DNK: {
+        fillKey: 'MEDIUM',
+        numberOfThings: 10381
+      },
+      FRA: {
+        fillKey: 'MEDIUM',
+        numberOfThings: 10381
+      },
+      DEU: {
+        fillKey: 'MEDIUM',
+        numberOfThings: 10381
+      },
+      HKG: {
+        fillKey: 'MEDIUM',
+        numberOfThings: 10381
+      },
+      IRL: {
+        fillKey: 'MEDIUM',
+        numberOfThings: 10381
+      },
+      ITA: {
+        fillKey: 'MEDIUM',
+        numberOfThings: 10381
+      },
+      JPN: {
+        fillKey: 'MEDIUM',
+        numberOfThings: 10381
+      },
+      LUX: {
+        fillKey: 'MEDIUM',
+        numberOfThings: 10381
+      },
+      MEX: {
+        fillKey: 'MEDIUM',
+        numberOfThings: 10381
+      },
+      NZL: {
+        fillKey: 'MEDIUM',
+        numberOfThings: 10381
+      },
+      NOR: {
+        fillKey: 'MEDIUM',
+        numberOfThings: 10381
+      },
+      ESP: {
+        fillKey: 'MEDIUM',
+        numberOfThings: 10381
+      },
+      SWE: {
+        fillKey: 'MEDIUM',
+        numberOfThings: 10381
+      },
+      CHE: {
+        fillKey: 'MEDIUM',
+        numberOfThings: 10381
+      },
+      NLD: {
+        fillKey: 'MEDIUM',
+        numberOfThings: 10381
+      },
+      GBR: {
+        fillKey: 'MEDIUM',
+        numberOfThings: 10381
+      },
+      USA: {
+        fillKey: 'MEDIUM',
+        numberOfThings: 10381
+      }
+    },
+    geographyConfig: {
+      popupTemplate: function(geo,data) {
+        return ['<div class="hoverinfo"><strong>',
+                'Number of things in ' + geo.properties.name,
+                ': ' + data.numberOfThings,
+                '</strong></div>'].join('');
+      }
+    }
+  }
+);

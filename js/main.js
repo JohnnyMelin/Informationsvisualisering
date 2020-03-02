@@ -15,8 +15,8 @@ function draw(error, data1, data2, data3) {
     if (error) throw error;
     console.log("Code Starts");
     var arr = [];
-    for(var i = 1000; i < 1008; ++i){
-      //console.log(data2[i]);
+    for(var i = 1000; i < 1010; ++i){
+      console.log("This is a data item" + data2[i]);
       arr.push(data2[i]);
     }
 

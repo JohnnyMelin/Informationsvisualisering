@@ -200,3 +200,11 @@ div.tooltip {
       text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
       cursor: move;
       }
+
+
+      /* MARTINS TESTSKIT */
+      #map-container {
+        margin: auto;
+        width: 1000px;
+        height: 1000px;
+      }

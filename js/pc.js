@@ -9,48 +9,19 @@
 // Data set: https://www.kaggle.com/kemical/kickstarter-projects/data#ks-projects-201801.csv
 
 // http://bl.ocks.org/piwodlaiwo/cbce7d163349da5c615a08b6e7a12d69
-function pc(dota){
+
+function pc(data) {
 
       var excludedDims = ['ID', 'category', 'pledged', 'currency','usd_pledged' , 'goal', ,'name',''];
       var happyDims = ['main_category','launched','deadline','state','backers','country', 'usd_goal_real', 'usd_pledged_real'];
 
-      var data = dota;
-      var div = '#parcoord';
-      var parentWidth = $(div).parent().width();
       var margin = {top: 50, right: 50, bottom: 50, left: 50},
       width = 960 - margin.left - margin.right,
       height = 500 - margin.top - margin.bottom;
 
+      console.log(data);
       // Create dimensions for each axis
       var dimensions = [
-        /*{
-            {
-                  name: "main_category",
-                  scale: d3.scale.ordinal().rangePoints([0, height]),
-                  type: "string"
-
-            },
-                  name: "deadline",
-                  scale: d3.scale.ordinal().rangePoints([0, height]),
-                  type: "string"
-            },
-            {
-                  name: "launched",
-                  scale: d3.scale.ordinal().rangePoints([0, height]),
-                  type: "string"
-            },
-
-            {
-                  name: "state",
-                  scale: d3.scale.ordinal().rangePoints([0, height]),
-                  type: "string"
-            },
-            {
-                  name: "country",
-                  scale: d3.scale.ordinal().rangePoints([0, height]),
-                  type: "string"
-            },
-            */
             {
                   name: "dateRange",
                   scale: d3.scale.linear().range([height,0]),
@@ -58,28 +29,28 @@ function pc(dota){
             },
             {
                   name: "successRate",
-                  scale: d3.scale.linear().range([height,0]),
+                  scale: d3.scale.log().range([height,0]),
                   type: "number",
             },
             {
                   name: "pledged",
-                  scale: d3.scale.linear().range([height, 0]),
+                  scale: d3.scale.log().range([height, 0]),
                   type: "number"
             },
             {
                   name: "backers",
-                  scale: d3.scale.linear().range([height, 0]),
+                  scale: d3.scale.log().range([height, 0]),
                   type: "number"
             },
             {
                   name: "usd_goal_real",
-                  scale: d3.scale.log().range([height, 0]),
+                  scale: d3.scale.linear().range([height, 0]),
                   type: "number"
             }
       ];
 
       var x = d3.scale.ordinal().domain(dimensions.map(function(d) { return d.name; })).rangePoints([0, width]),
-      y = {},
+      //y = {},
       dragging = {};
 
       var line = d3.svg.line(),
@@ -87,7 +58,8 @@ function pc(dota){
       background,
       foreground;
 
-      var svg = d3.select("div").append("svg")
+      // Important to select our container
+      var svg = d3.select("#parallel-coordinates")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
       .append("g")
@@ -96,10 +68,7 @@ function pc(dota){
       //Create the dimensions depending on attribute "type" (number|string)
       //The x-scale calculates the position by attribute dimensions[x].name
       dimensions.forEach(function(dimension) {
-            dimension.scale.domain(dimension.type === "number"
-            ? d3.extent(data, function(d) { return +d[dimension.name]; })
-            : data.map(function(d) { return d[dimension.name]; }).sort());
-            // ["success", "failed", "canceled", "undefined", "live"]
+            dimension.scale.domain(d3.extent(data, function(d) { return +d[dimension.name]; }));
       });
 
       // Add grey background lines for context.
@@ -115,12 +84,13 @@ function pc(dota){
       foreground = svg.append("g")
             .attr("class", "foreground")
             .style("stroke", "steelblue")
+            .style("stroke-width", "1px")
             .selectAll("path")
             .data(data)
             .enter().append("path")
             .attr("d", path);
 
-      var details = d3.select("body").append("div")
+      var details = d3.select(".detailOnDemand")
             .attr("class", "detailOnDemand")
             .attr("width", 100)
             .attr("height", 100)
@@ -140,7 +110,7 @@ function pc(dota){
             var self = d3.select(this)
             var c = self.attr("class", "path")
                         .style("stroke","steelblue")
-                        .style("stroke-width", "0.5px")
+                        .style("stroke-width", "1px")
             })
       .on("click", function() {
             var self = d3.select(this)
@@ -198,9 +168,7 @@ function pc(dota){
       // Add an axis and title.
       g.append("g")
       .attr("class", "axis")
-      .each(function(d) {
-            //if(d.type === "number"){ axis.ticks(3); }
-            d3.select(this).call(axis.scale(d.scale)); })
+      .each(function(d) { d3.select(this).call(axis.scale(d.scale)); })
             .append("text")
             .style("text-anchor", "middle")
             .attr("class", "axis-label")

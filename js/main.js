@@ -3,6 +3,10 @@
  * @LastUpdate
  * @author Johnny Melin, Oscar Ullberg, Martin Marklund
  */
+
+//import {create_parallelCoordinates} from './pc.js';
+//import {create_parallelSet} from './pss.js';
+
 queue()
   .defer(d3.csv,'data/ks-projects-201612.csv')
   .defer(d3.csv,'data/ks-projects-201801.csv')
@@ -12,44 +16,50 @@ queue()
 var pss, pc, world_map, points;
 
 function draw(error, data1, data2, data3) {
-    if (error) throw error;
-    console.log("Code Starts");
-    var arr = [];
-    for(var i = 1000; i < 1010; ++i){
-      console.log("This is a data item" + data2[i]);
-      arr.push(data2[i]);
-    }
+  if (error) throw error;
+  console.log("Code Starts");
+  var arr = [];
+  for(var i = 0; i < 5; ++i){
+    arr.push(data2[i]);
+  }
+
+  //console.log(arr);
 
   var parsedData = parseData(arr); // parse the data so we have no incomplete items.
   //Test different data at the end!
-  pc = new pc(parsedData);
+  
+  //create_parallelCoordinates(parseData);
+  //create_parallelSet(parseData);
+  
+  //pc = new pc(parsedData);
   pss = new pss(parsedData);
-  console.log("Code Ends");
+  //console.log("Code Ends");
 }
 
 function rangeDays(d){
-      var ymd = d.launched.substring(0,10);
-      var launched = ymd.split('-');
-      var deadline = d.deadline.split('-');
-      var startDate = new Date(launched[0], launched[1], launched[2]);
-      var endDate = new Date(deadline[0], deadline[1], deadline[2])
+    var ymd = d.launched.substring(0,10);
+    var launched = ymd.split('-');
+    var deadline = d.deadline.split('-');
+    var startDate = new Date(launched[0], launched[1], launched[2]);
+    var endDate = new Date(deadline[0], deadline[1], deadline[2])
 
 
-      return Math.round((endDate - startDate)/(1000*60*60*24));
+    return Math.round((endDate - startDate)/(1000*60*60*24));
 }
 
 function getSuccess(d){
-      var test = Math.round((d.usd_pledged_real/d.usd_goal_real)*(100));
-      return test;
+    var test = Math.round((d.usd_pledged_real/d.usd_goal_real)*(100));
+    return test;
 }
 
 function parseData(data){
-  console.log(data.length);
+
   var arr = [];
   for (var i in data){
     var bool = true;
     var item = data[i];
     for (var j in item){
+      // If an object is missing a property, exclude it.
       if(item[j] === "" || typeof item[j] === "undefined"){
         bool = false;
       }
@@ -58,7 +68,7 @@ function parseData(data){
           var test = 0;
           test = getSuccess(item);
       arr.push({
-        backers: item.backers,
+        backers: item.backers == 0 ? 1 : item.backers, // Must not be zero for log scale to work
         category: item.category,
         country: item.country,
         currency: item.currency,
@@ -68,16 +78,16 @@ function parseData(data){
         launched: item.launched,
         main_category: item.main_category,
         name: item.name,
-        pledged: item.pledged,
+        pledged: item.pledged == 0 ? 1 : item.pledged,  // Must not be zero for log scale to work
         state: item.state,
         usd_pledged: item["usd pledged"],
         usd_goal_real: item.usd_goal_real,
         usd_pledged_real: item.usd_pledged_real,
         dateRange : rangeDays(item),
-        successRate : test,
+        successRate : test == 0 ? 1 : test, // Must not be zero for log scale to work
       });
     }
   }
-  console.log(arr.length);
+  //console.log(`Number of invalid objects = ${data.length - arr.length}`);
   return arr;
 }

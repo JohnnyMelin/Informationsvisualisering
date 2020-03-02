@@ -1,31 +1,29 @@
+function pss(dota) {
 
-function pss(dota){
-
-      class entry {
+      /*class entry {
             constructor(height, width) {
             this.height = height;
             this.width = width;
             }
-      }
+      }*/
 
+      
       var pssdata  = generateData(dota);
+      
       am4core.ready(function() {
-
       // Themes begin
-      am4core.useTheme(am4themes_spiritedaway);
-      am4core.useTheme(am4themes_animated);
+      //am4core.useTheme(am4themes_spiritedaway);
+      //am4core.useTheme(am4themes_animated);
       // Themes end
 
-      var chart = am4core.create("chartdiv", am4charts.SankeyDiagram);
+      var chart = am4core.create("parallel-sets-container", am4charts.SankeyDiagram);
+      
+
       chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
       chart.data = pssdata;
-      /*
+/*
  chart.data = [
-         { from: "A", to: "E", value: 10, id:"125-0" },
-         { from: "A", to: "E", value: 10, id:"525-0" },
-         { from: "A", to: "E", value: 10, id:"453-0" },
-         { from: "A", to: "E", value: 10, id:"3213-0" },
-         { from: "A", to: "E", value: 10, id:"46-0" },
+         
          { from: "A", to: "E", value: 10, id:"A0-0" },
          { from: "A", to: "F", value: 10, id:"A1-0" },
          { from: "A", to: "G", value: 10, id:"A2-0" },
@@ -132,6 +130,9 @@ function pss(dota){
 
       }); // end am4core.ready()
 
+
+      
+
       //Function to see if we already have a connection from that specific
       //from to to.
       function contains(array, object){
@@ -139,7 +140,9 @@ function pss(dota){
             //can increment that connections' value.
             var positionInList = 0;
             array.forEach(item => {
-                  if(item.from === object.from && item.to === object.to) return positionInList;
+                  if(item.from === object.from && item.to === object.to) 
+                        return positionInList;
+                  
                   positionInList++;
             })
             return undefined;
@@ -147,68 +150,70 @@ function pss(dota){
 
       function generateData(data){
 
-            counter1 = 0;
-
+            let id_start = 0;
+            
             var arr = [];
             data.forEach( item => {
-                  counter2 = 0;
+                  
+                  let id_section = 0;
                   var boolean = false;
-                  /////////////////////make connection for obj1/////////////////
-                  var obj1 = {
+                  // First path
+                  var path_first = {
                         from: item.country,
                         to: item.state,
                         value : 1,
-                        //id: counter1 + "-" + counter2
+                        //id: id_start + "-" + id_section
                   }
-                  boolean = contains(arr,obj1)
-                  if(boolean != undefined)
+                  // Does a path like this already exist?
+                  /*boolean = contains(arr,path_first)  
+                  if(boolean != undefined)      // Path already exist, add to existing
                   {
                         //Skriv om
                         arr[boolean].value += 1;
                   }
-                  else
-                  {
-                        arr.push(obj1)
-                        counter2++;
-                  }
-                  /////////////////////make connection for obj2/////////////////
-                  var obj2 = {
+                  else                         // Path does not exist, create new
+                  {*/
+                        arr.push(path_first)
+                        id_section++;
+                  //}
+                  // Second path
+                  var path_second = {
                         from: item.state,
                         to: item.category,
                         value : 1,
-                        //id: counter1 + "-" + counter2
+                        //id: id_start + "-" + id_section
                   }
-                  boolean = contains(arr,obj2)
+                  /*boolean = contains(arr,path_second)
                   if(boolean != undefined)
                   {
                         //increment value on that id
                         arr[boolean].value += 1;
                   }
                   else
-                  {
-                        arr.push(obj2)
-                        counter2++;
-                  }
-                  /////////////////////make connection for obj3/////////////////
-                  var obj3 = {
+                  {*/
+                        arr.push(path_second)
+                        id_section++;
+                  //}
+                  // Third path
+                  var path_third = {
                         from: item.category,
                         to: item.main_category,
                         value : 1,
-                        //id: counter1 + "-" + counter2
+                        //id: id_start + "-" + id_section
                   }
-                  boolean = contains(arr,obj3)
+                  /*boolean = contains(arr,path_third)
                   if(boolean != undefined)
                   {
                         //increment value on that id
                         arr[boolean].value += 1;
                   }
                   else
-                  {
-                        arr.push(obj3)
-                  }
-                  counter1++;
+                  {*/
+                        arr.push(path_third)
+                  //}
+                  id_start++;
             }) // end of for loop
-            console.log(arr)
+            //console.log(arr)
             return arr;
       } // end of function generateData
 } // end of pss

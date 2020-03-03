@@ -25,7 +25,7 @@ function draw(error, data1, data2, world_data, data4) {
   {
     map_data.push(world_data[i]);
   }
-  for(var i = 0; i < 100; ++i){
+  for(var i = 0; i < data2.length; ++i){
     arr.push(data2[i]);
   }
 
@@ -148,11 +148,6 @@ function getPssData(data){
                   var bool = false;
                   for(i = 0; i < sankeyData.length; ++i)
                   {
-                        console.log("===============================");
-                        console.log(sankeyData[i][wantedCategories[0]]);
-                        console.log(sankeyData[i][wantedCategories[1]]);
-                        console.log(sankeyData[i][wantedCategories[2]]);
-                        console.log("===============================");
 
                         if(entry[wantedCategories[0]] == sankeyData[i][wantedCategories[0]] && entry[wantedCategories[1]] == sankeyData[i][wantedCategories[1]] && entry[wantedCategories[2]] == sankeyData[i][wantedCategories[2]] )
                         {
@@ -186,7 +181,6 @@ function getPssData(data){
                   }
             }
       });
-      console.log(sankeyData)
       var arr = [];
       let id_start = 0;
       sankeyData.forEach( item => {

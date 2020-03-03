@@ -25,21 +25,21 @@ function draw(error, data1, data2, world_data, data4) {
   {
     map_data.push(world_data[i]);
   }
-  for(var i = 0; i < 5; ++i){
+  for(var i = 0; i < 100; ++i){
     arr.push(data2[i]);
   }
 
   //console.log(arr);
   var parsed_map = parseMap(map_data);
   var parsedData = parseData(arr); // parse the data so we have no incomplete items.
-  
+  var pssData = getPssData(parsedData); // Format data so the pss can display it
   //Test different data at the end!
-  
+
   //create_parallelCoordinates(parseData);
   //create_parallelSet(parseData);
-  
+
   //pc = new pc(parsedData);
-  pss = new pss(parsedData);
+  pss = new pss(pssData);
   map = new world_map(parsed_map);
   console.log("Code Ends");
 }
@@ -99,6 +99,143 @@ function parseData(data){
   //console.log(`Number of invalid objects = ${data.length - arr.length}`);
   return arr;
 }
+
+//Function to see if we already have a connection from that specific
+//from to to.
+function contains(array, object){
+      //We wanna know where the connection already exists so that we
+      //can increment that connections' value.
+      var positionInList = 0;
+      array.forEach(item => {
+            if(item.from == object.from && item.to == object.to)
+                  return positionInList;
+
+            positionInList++;
+      })
+      return undefined;
+}
+
+function getPssData(data){
+
+      var wantedCategories = ['country', 'currency', 'state'];
+      var sankeyData = [];
+      data.forEach(entry => {
+            if(sankeyData.length == 0){
+                  sankeyData.push(
+                        {
+                              backers: entry.backers, // Must not be zero for log scale to work
+                              category: entry.category,
+                              country: entry.country,
+                              currency: entry.currency,
+                              deadline: entry.deadline,
+                              goal: entry.goal,
+                              ID: entry.ID,
+                              launched: entry.launched,
+                              main_category: entry.main_category,
+                              name: entry.name,
+                              pledged: entry.pledged,  // Must not be zero for log scale to work
+                              state: entry.state,
+                              usd_pledged: entry.usd_pledged,
+                              usd_goal_real: entry.usd_goal_real,
+                              usd_pledged_real: entry.usd_pledged_real,
+                              dateRange : entry.dateRange,
+                              successRate : entry.successRate, // Must not be zero for log scale to work
+                              value: 1,
+                        }
+                  )
+            }
+            else{
+                  var bool = false;
+                  for(i = 0; i < sankeyData.length; ++i)
+                  {
+                        console.log("===============================");
+                        console.log(sankeyData[i][wantedCategories[0]]);
+                        console.log(sankeyData[i][wantedCategories[1]]);
+                        console.log(sankeyData[i][wantedCategories[2]]);
+                        console.log("===============================");
+
+                        if(entry[wantedCategories[0]] == sankeyData[i][wantedCategories[0]] && entry[wantedCategories[1]] == sankeyData[i][wantedCategories[1]] && entry[wantedCategories[2]] == sankeyData[i][wantedCategories[2]] )
+                        {
+                              sankeyData[i].value += 1;
+                              bool = true;
+                              break;
+                        }
+                  }
+                  if(bool == false){
+                        sankeyData.push(
+                              {
+                                    backers: entry.backers, // Must not be zero for log scale to work
+                                    category: entry.category,
+                                    country: entry.country,
+                                    currency: entry.currency,
+                                    deadline: entry.deadline,
+                                    goal: entry.goal,
+                                    ID: entry.ID,
+                                    launched: entry.launched,
+                                    main_category: entry.main_category,
+                                    name: entry.name,
+                                    pledged: entry.pledged,  // Must not be zero for log scale to work
+                                    state: entry.state,
+                                    usd_pledged: entry.usd_pledged,
+                                    usd_goal_real: entry.usd_goal_real,
+                                    usd_pledged_real: entry.usd_pledged_real,
+                                    dateRange : entry.dateRange,
+                                    successRate : entry.successRate, // Must not be zero for log scale to work
+                                    value: 1,
+                              });
+                  }
+            }
+      });
+      console.log(sankeyData)
+      var arr = [];
+      let id_start = 0;
+      sankeyData.forEach( item => {
+
+            let id_section = 0;
+            var boolean = 0;
+            // First path
+            var path_first = {
+                  from: item.country,
+                  to: item.currency,
+                  value : item.value,
+                  id: item.ID + "-" + id_section,
+            }
+
+            arr.push(path_first)
+            id_section++;
+
+            // Second path
+            var path_second = {
+                  from: item.currency,
+                  to: item.state,
+                  value :item.value,
+                  id: item.ID + "-" + id_section,
+            }
+            arr.push(path_second)
+            id_section++;
+
+            // Third path
+            /*var path_third = {
+                  from: item.category,
+                  to: item.state,
+                  value : 1,
+                  id: id_start + "-" + id_section
+            }/*
+            /*boolean = contains(arr,path_third)
+            if(boolean != undefined)
+            {
+                  //increment value on that id
+                  arr[boolean].value += 1;
+            }
+            else
+            {*/
+                  //arr.push(path_third)
+            //}
+            id_start++;
+      }); // end of for loop
+      //console.log(arr)
+      return arr;
+} // end of function pssData
 
 function parseMap(data) {
   var arr = [];

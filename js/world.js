@@ -9,13 +9,13 @@ function world_map(data) {
                'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN',
                'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN',
                'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN'];
-  
+
   calcSums();
-  decideFill();  
+  decideFill();
 
 
-  console.log(sums);
-  console.log(fills);
+  //console.log(sums);
+  //console.log(fills);
 
   var map = new Datamap(
     {
@@ -226,7 +226,7 @@ function world_map(data) {
           case "USA":
             sums[21] += parseInt(item.state_value);
             break;
-        
+
       }
     }
   }
@@ -240,11 +240,3 @@ function world_map(data) {
     }
   }
 }
-
-
-
-
-
-
-
-

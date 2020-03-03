@@ -12,7 +12,7 @@ function world_map(data) {
                'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN',
                'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN',
                'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN'];
-  
+
   calcSums();
   calcRates();
 
@@ -307,7 +307,7 @@ function world_map(data) {
             if(parseInt(item.state_value) == 1)
             rate[21]++;
             break;
-        
+
       }
     }
   }
@@ -330,11 +330,3 @@ function world_map(data) {
     }
   }
 }
-
-
-
-
-
-
-
-

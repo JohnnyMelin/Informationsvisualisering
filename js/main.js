@@ -10,22 +10,29 @@
 queue()
   .defer(d3.csv,'data/ks-projects-201612.csv')
   .defer(d3.csv,'data/ks-projects-201801.csv')
+  .defer(d3.csv, 'data/world_data.csv')
   .defer(d3.csv,'data/test.csv')
   .await(draw);
 
 var pss, pc, world_map, points;
 
-function draw(error, data1, data2, data3) {
+function draw(error, data1, data2, world_data, data4) {
   if (error) throw error;
   console.log("Code Starts");
   var arr = [];
+  var map_data = [];
+  for(var i = 0; i < world_data.length; ++i)
+  {
+    map_data.push(world_data[i]);
+  }
   for(var i = 0; i < 5; ++i){
     arr.push(data2[i]);
   }
 
   //console.log(arr);
-
+  var parsed_map = parseMap(map_data);
   var parsedData = parseData(arr); // parse the data so we have no incomplete items.
+  
   //Test different data at the end!
   
   //create_parallelCoordinates(parseData);
@@ -33,7 +40,8 @@ function draw(error, data1, data2, data3) {
   
   //pc = new pc(parsedData);
   pss = new pss(parsedData);
-  //console.log("Code Ends");
+  map = new world_map(parsed_map);
+  console.log("Code Ends");
 }
 
 function rangeDays(d){
@@ -90,4 +98,29 @@ function parseData(data){
   }
   //console.log(`Number of invalid objects = ${data.length - arr.length}`);
   return arr;
+}
+
+function parseMap(data) {
+  var arr = [];
+  for(var i in data) {
+    var valid = true;
+    var item = data[i];
+    // Filter out invalid objects
+    for (var j in item) {
+      if(item[j] === "" || typeof item[j] === "undefined") {
+        valid = false;
+      }
+    }
+    if(valid) {
+      arr.push({
+        country : item.country_3,
+        //country_3  : item.country_3,
+        state : item.state,
+        state_value : item.state_value
+      });
+    }
+  }
+
+  return arr;
+
 }

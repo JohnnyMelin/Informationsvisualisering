@@ -25,7 +25,7 @@ function draw(error, data1, data2, world_data, data4) {
   {
     map_data.push(world_data[i]);
   }
-  for(var i = 0; i < data2.length; ++i){
+  for(var i = 0; i < 100; ++i){
     arr.push(data2[i]);
   }
 
@@ -38,13 +38,13 @@ function draw(error, data1, data2, world_data, data4) {
   //create_parallelCoordinates(parseData);
   //create_parallelSet(parseData);
 
-  //pc = new pc(parsedData);
+  pc = new pc(parsedData);
   pss = new pss(pssData);
   map = new world_map(parsed_map);
   console.log("Code Ends");
 }
 
-function rangeDays(d){
+function numberOfDays(d){
     var ymd = d.launched.substring(0,10);
     var launched = ymd.split('-');
     var deadline = d.deadline.split('-');
@@ -54,6 +54,41 @@ function rangeDays(d){
 
     return Math.round((endDate - startDate)/(1000*60*60*24));
 }
+
+
+function dateRange(numDays){
+      if(numDays >= 50)
+            return ">50 days"
+      if(numDays >= 40)
+            return "40-50 days"
+      if(numDays >= 30)
+            return "30-40 days"
+      if(numDays >= 20)
+            return "20-30 days"
+      if(numDays >= 10)
+            return "10-20 days"
+
+      return "<10 days"
+}
+
+function successRange(suc){
+      if(suc >= 200)
+            return ">200%"
+      if(suc >= 120)
+            return "120%-200%"
+      if(suc >= 100)
+            return "100%-120%"
+      if(suc >= 50)
+            return "50%-100%"
+      if(suc >= 25)
+            return "25%-50%"
+      if(suc >= 10)
+            return "10%-25%"
+
+      return "<10%";
+}
+
+
 
 function getSuccess(d){
     var test = Math.round((d.usd_pledged_real/d.usd_goal_real)*(100));
@@ -74,7 +109,7 @@ function parseData(data){
     }
     if(bool){
           var test = 0;
-          test = getSuccess(item);
+          success = getSuccess(item);
       arr.push({
         backers: item.backers == 0 ? 1 : item.backers, // Must not be zero for log scale to work
         category: item.category,
@@ -88,11 +123,13 @@ function parseData(data){
         name: item.name,
         pledged: item.pledged == 0 ? 1 : item.pledged,  // Must not be zero for log scale to work
         state: item.state,
-        usd_pledged: item["usd pledged"],
-        usd_goal_real: item.usd_goal_real,
-        usd_pledged_real: item.usd_pledged_real,
-        dateRange : rangeDays(item),
-        successRate : test == 0 ? 1 : test, // Must not be zero for log scale to work
+        usd_pledged: item["usd pledged"] == 0 ? 1 : item["usd pledged"],
+        usd_goal_real: item.usd_goal_real == 0 ? 1 : item.usd_goal_real ,
+        usd_pledged_real: item.usd_pledged_real == 0 ? 1 : item.usd_pledged_real,
+        number_of_days : numberOfDays(item),
+        date_range : dateRange(numberOfDays(item)),
+        success_rate : success == 0 ? 1 : success, // Must not be zero for log scale to work
+        success_range : successRange(success),
       });
     }
   }
@@ -117,7 +154,7 @@ function contains(array, object){
 
 function getPssData(data){
 
-      var wantedCategories = ['country', 'currency', 'state'];
+      var wantedCategories = ['country', 'main_category', 'date_range', 'state', 'success_range'];
       var sankeyData = [];
       data.forEach(entry => {
             if(sankeyData.length == 0){
@@ -138,8 +175,10 @@ function getPssData(data){
                               usd_pledged: entry.usd_pledged,
                               usd_goal_real: entry.usd_goal_real,
                               usd_pledged_real: entry.usd_pledged_real,
-                              dateRange : entry.dateRange,
-                              successRate : entry.successRate, // Must not be zero for log scale to work
+                              number_of_days : entry.number_of_days,
+                              date_range : entry.date_range,
+                              success_rate : entry.success_rate, // Must not be zero for log scale to work
+                              success_range : entry.success_range,
                               value: 1,
                         }
                   )
@@ -149,7 +188,7 @@ function getPssData(data){
                   for(i = 0; i < sankeyData.length; ++i)
                   {
 
-                        if(entry[wantedCategories[0]] == sankeyData[i][wantedCategories[0]] && entry[wantedCategories[1]] == sankeyData[i][wantedCategories[1]] && entry[wantedCategories[2]] == sankeyData[i][wantedCategories[2]] )
+                        if(entry[wantedCategories[0]] == sankeyData[i][wantedCategories[0]] && entry[wantedCategories[1]] == sankeyData[i][wantedCategories[1]] && entry[wantedCategories[2]] == sankeyData[i][wantedCategories[2]] && entry[wantedCategories[3]] == sankeyData[i][wantedCategories[3]] && entry[wantedCategories[4]] == sankeyData[i][wantedCategories[4]])
                         {
                               sankeyData[i].value += 1;
                               bool = true;
@@ -174,58 +213,27 @@ function getPssData(data){
                                     usd_pledged: entry.usd_pledged,
                                     usd_goal_real: entry.usd_goal_real,
                                     usd_pledged_real: entry.usd_pledged_real,
-                                    dateRange : entry.dateRange,
-                                    successRate : entry.successRate, // Must not be zero for log scale to work
+                                    number_of_days : entry.number_of_days,
+                                    date_range : entry.date_range,
+                                    success_rate : entry.success_rate, // Must not be zero for log scale to work
+                                    success_range : entry.success_range,
                                     value: 1,
                               });
                   }
             }
       });
       var arr = [];
-      let id_start = 0;
+      console.log(sankeyData)
       sankeyData.forEach( item => {
-
-            let id_section = 0;
-            var boolean = 0;
-            // First path
-            var path_first = {
-                  from: item.country,
-                  to: item.currency,
-                  value : item.value,
-                  id: item.ID + "-" + id_section,
-            }
-
-            arr.push(path_first)
-            id_section++;
-
-            // Second path
-            var path_second = {
-                  from: item.currency,
-                  to: item.state,
-                  value :item.value,
-                  id: item.ID + "-" + id_section,
-            }
-            arr.push(path_second)
-            id_section++;
-
-            // Third path
-            /*var path_third = {
-                  from: item.category,
-                  to: item.state,
-                  value : 1,
-                  id: id_start + "-" + id_section
-            }/*
-            /*boolean = contains(arr,path_third)
-            if(boolean != undefined)
-            {
-                  //increment value on that id
-                  arr[boolean].value += 1;
-            }
-            else
-            {*/
-                  //arr.push(path_third)
-            //}
-            id_start++;
+            for(id_section = 1; id_section < wantedCategories.length; id_section++ )
+            arr.push(
+                  {
+                       from: item[wantedCategories[id_section - 1]],
+                       to: item[wantedCategories[id_section]],
+                       value : item.value,
+                       id: item.ID + "-" + ((id_section % wantedCategories.length) - 1),
+                  }
+            );
       }); // end of for loop
       //console.log(arr)
       return arr;

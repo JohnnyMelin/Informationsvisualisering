@@ -23,12 +23,12 @@ function pc(data) {
       // Create dimensions for each axis
       var dimensions = [
             {
-                  name: "dateRange",
+                  name: "number_of_days",
                   scale: d3.scale.linear().range([height,0]),
                   type: "number",
             },
             {
-                  name: "successRate",
+                  name: "success_rate",
                   scale: d3.scale.log().range([height,0]),
                   type: "number",
             },
@@ -124,12 +124,12 @@ function pc(data) {
                               + "Sub Category:      " + dede.category + "<br />"
                               + "Launch date:       " + dede.launched + "<br />"
                               + "Deadline:          " + dede.deadline + "<br />"
-                              + "Days active:       " + dede.dateRange + " days" + "<br />"
+                              + "Days active:       " + dede.number_of_days + " days" + "<br />"
                               + "Current State:     " + dede.state + "<br />"
                               + "Backers:           " + dede.backers + "<br />"
                               + "Pledged:           " + dede.usd_pledged_real + "$" + "<br />"
                               + "Goal:              " + dede.usd_goal_real + "$" + "<br />"
-                              + "Success Rate:      " + dede.successRate + "%";
+                              + "Success Rate:      " + dede.success_rate + "%";
             })
 
 

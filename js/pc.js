@@ -115,21 +115,18 @@ function pc(data) {
       .on("click", function() {
             var self = d3.select(this)
             var dede = self[0][0].__data__ // This is an array containting the clicked elements data entry
-            var textbox = document.getElementById('detailbox');
-            console.log(dede.usd_goal_real)
-            console.log(dede)
-            textbox.innerHTML = "Name:              " + dede.name + "<br />"
-                              + "Country of Origin: " + dede.country + "<br />"
-                              + "Main Category:     " + dede.main_category + "<br />"
-                              + "Sub Category:      " + dede.category + "<br />"
-                              + "Launch date:       " + dede.launched + "<br />"
-                              + "Deadline:          " + dede.deadline + "<br />"
-                              + "Days active:       " + dede.number_of_days + " days" + "<br />"
-                              + "Current State:     " + dede.state + "<br />"
-                              + "Backers:           " + dede.backers + "<br />"
-                              + "Pledged:           " + dede.usd_pledged_real + "$" + "<br />"
-                              + "Goal:              " + dede.usd_goal_real + "$" + "<br />"
-                              + "Success Rate:      " + dede.success_rate + "%";
+            document.getElementById('Name').innerHTML = dede.name;
+            document.getElementById('Country').innerHTML = dede.country;
+            document.getElementById('Main').innerHTML = dede.main_category;
+            document.getElementById('Sub').innerHTML = dede.category;
+            document.getElementById('Launch').innerHTML = dede.launched;
+            document.getElementById('Deadline').innerHTML = dede.deadline;
+            document.getElementById('Days').innerHTML = dede.number_of_days;
+            document.getElementById('State').innerHTML = dede.state;
+            document.getElementById('Backers').innerHTML = dede.backers;
+            document.getElementById('Pledged').innerHTML = dede.usd_pledged_real;
+            document.getElementById('Goal').innerHTML = dede.usd_goal_real;
+            document.getElementById('Success').innerHTML = dede.success_rate;
             })
 
 

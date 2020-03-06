@@ -139,6 +139,14 @@ sankey: {
      left: 100%;
    }
 
+p {
+  font-size: 20;
+}
+
+p.bold  {
+  font-weight: bold;
+}
+
 div.tooltip {
   position: absolute;
   text-align: center;
@@ -228,7 +236,7 @@ div.tooltip {
 
       #parallel-coordinates-container div.detailOnDemand {
         padding: 1rem;
-
+        
         width: 1000;
         height:1000;
 

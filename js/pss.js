@@ -36,8 +36,6 @@ function pss(dota) {
       chart.links.template.events.on("over", function(event){
             let link = event.target;
             let id = link.id.split("-")[0];
-            console.log(link.id)
-            console.log(link.template)
             chart.links.each(function(link){
                   if(link.id.indexOf(id) != -1){
                         link.isHover = true;

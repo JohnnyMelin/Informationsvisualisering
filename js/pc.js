@@ -28,7 +28,7 @@ function pc(data) {
                   type: "number",
             },
             {
-                  name: "success_rate",
+                  name: "profit_rate",
                   scale: d3.scale.log().range([height,0]),
                   type: "number",
             },
@@ -126,7 +126,7 @@ function pc(data) {
             document.getElementById('Backers').innerHTML = dede.backers;
             document.getElementById('Pledged').innerHTML = dede.usd_pledged_real;
             document.getElementById('Goal').innerHTML = dede.usd_goal_real;
-            document.getElementById('Success').innerHTML = dede.success_rate;
+            document.getElementById('Profit').innerHTML = dede.profit_rate;
             })
 
 

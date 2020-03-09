@@ -71,7 +71,7 @@ function dateRange(numDays){
       return "<10 days"
 }
 
-function successRange(suc){
+function profitRange(suc){
       if(suc >= 200)
             return ">200%"
       if(suc >= 120)
@@ -90,7 +90,7 @@ function successRange(suc){
 
 
 
-function getSuccess(d){
+function getProfit(d){
     var test = Math.round((d.usd_pledged_real/d.usd_goal_real)*(100));
     return test;
 }
@@ -109,7 +109,7 @@ function parseData(data){
     }
     if(bool){
           var test = 0;
-          success = getSuccess(item);
+          profit = getProfit(item);
       arr.push({
         backers: item.backers == 0 ? 1 : item.backers, // Must not be zero for log scale to work
         category: item.category,
@@ -128,8 +128,8 @@ function parseData(data){
         usd_pledged_real: item.usd_pledged_real == 0 ? 1 : item.usd_pledged_real,
         number_of_days : numberOfDays(item),
         date_range : dateRange(numberOfDays(item)),
-        success_rate : success == 0 ? 1 : success, // Must not be zero for log scale to work
-        success_range : successRange(success),
+        profit_rate : profit == 0 ? 1 : profit, // Must not be zero for log scale to work
+        profit_range : profitRange(profit),
       });
     }
   }
@@ -154,7 +154,7 @@ function contains(array, object){
 
 function getPssData(data){
 
-      var wantedCategories = ['country', 'main_category', 'date_range', 'state', 'success_range'];
+      var wantedCategories = ['country', 'main_category', 'date_range', 'state', 'profit_range'];
       var sankeyData = [];
       data.forEach(entry => {
             if(sankeyData.length == 0){
@@ -177,8 +177,8 @@ function getPssData(data){
                               usd_pledged_real: entry.usd_pledged_real,
                               number_of_days : entry.number_of_days,
                               date_range : entry.date_range,
-                              success_rate : entry.success_rate, // Must not be zero for log scale to work
-                              success_range : entry.success_range,
+                              profit_rate : entry.profit_rate, // Must not be zero for log scale to work
+                              profit_range : entry.profit_range,
                               value: 1,
                         }
                   )
@@ -215,8 +215,8 @@ function getPssData(data){
                                     usd_pledged_real: entry.usd_pledged_real,
                                     number_of_days : entry.number_of_days,
                                     date_range : entry.date_range,
-                                    success_rate : entry.success_rate, // Must not be zero for log scale to work
-                                    success_range : entry.success_range,
+                                    profit_rate : entry.profit_rate, // Must not be zero for log scale to work
+                                    profit_range : entry.profit_range,
                                     value: 1,
                               });
                   }

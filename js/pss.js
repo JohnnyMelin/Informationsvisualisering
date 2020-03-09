@@ -25,7 +25,7 @@ function pss(dota) {
       chart.dataFields.toName = "to";
       chart.dataFields.value = "value";
 
-      console.log(chart.links.template)
+      //console.log(chart.links.template)
       chart.links.template.propertyFields.id = "id";
       chart.links.template.colorMode = "solid";
       chart.links.template.fill = new am4core.InterfaceColorSet().getFor("alternativeBackground");

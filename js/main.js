@@ -8,38 +8,42 @@
 //import {create_parallelSet} from './pss.js';
 
 queue()
-  .defer(d3.csv,'data/ks-projects-201612.csv')
   .defer(d3.csv,'data/ks-projects-201801.csv')
-  .defer(d3.csv, 'data/world_data.csv')
+  .defer(d3.csv,'data/world_data.csv')
   .defer(d3.csv,'data/test.csv')
+  .defer(d3.csv,'data/sankey.csv')
   .await(draw);
 
 var pss, pc, world_map, points;
 
-function draw(error, data1, data2, world_data, data4) {
+function draw(error, data2, world_data, data4, sankey) {
   if (error) throw error;
   console.log("Code Starts");
   var arr = [];
   var map_data = [];
+  var sankey_data = [];
   for(var i = 0; i < world_data.length; ++i)
   {
     map_data.push(world_data[i]);
   }
-  for(var i = 0; i < 100; ++i){
+  for(var i = 0; i < 1000; ++i){
     arr.push(data2[i]);
+  }
+  for(var i = 1; i < 1000; ++i){
+    sankey_data.push(sankey[i]);
   }
 
   //console.log(arr);
   var parsed_map = parseMap(map_data);
-  var parsedData = parseData(arr); // parse the data so we have no incomplete items.
-  var pssData = getPssData(parsedData); // Format data so the pss can display it
+  //var parsedData = parseData(arr); // parse the data so we have no incomplete items.
+  var parsed_sankey = parseSankey(sankey_data); // Format data so the pss can display it
   //Test different data at the end!
 
   //create_parallelCoordinates(parseData);
   //create_parallelSet(parseData);
 
-  pc = new pc(parsedData);
-  pss = new pss(pssData);
+  //pc = new pc(parsedData);
+  pss = new pss(parsed_sankey);
   map = new world_map(parsed_map);
   console.log("Code Ends");
 }
@@ -47,16 +51,16 @@ function draw(error, data1, data2, world_data, data4) {
 function numberOfDays(d){
     var ymd = d.launched.substring(0,10);
     var launched = ymd.split('-');
-    var deadline = d.deadline.split('-');
     var startDate = new Date(launched[0], launched[1], launched[2]);
-    var endDate = new Date(deadline[0], deadline[1], deadline[2])
 
+    var deadline = d.deadline.split('-');
+    var endDate = new Date(deadline[0], deadline[1], deadline[2])
 
     return Math.round((endDate - startDate)/(1000*60*60*24));
 }
 
 
-function dateRange(numDays){
+/*function dateRange(numDays){
       if(numDays >= 50)
             return ">50 days"
       if(numDays >= 40)
@@ -67,7 +71,6 @@ function dateRange(numDays){
             return "20-30 days"
       if(numDays >= 10)
             return "10-20 days"
-
       return "<10 days"
 }
 
@@ -86,7 +89,7 @@ function profitRange(suc){
             return "10%-25%"
 
       return "<10%";
-}
+}*/
 
 
 
@@ -130,6 +133,7 @@ function parseData(data){
         date_range : dateRange(numberOfDays(item)),
         profit_rate : profit == 0 ? 1 : profit, // Must not be zero for log scale to work
         profit_range : profitRange(profit),
+
       });
     }
   }
@@ -152,92 +156,6 @@ function contains(array, object){
       return undefined;
 }
 
-function getPssData(data){
-
-      var wantedCategories = ['country', 'main_category', 'date_range', 'state', 'profit_range'];
-      var sankeyData = [];
-      data.forEach(entry => {
-            if(sankeyData.length == 0){
-                  sankeyData.push(
-                        {
-                              backers: entry.backers, // Must not be zero for log scale to work
-                              category: entry.category,
-                              country: entry.country,
-                              currency: entry.currency,
-                              deadline: entry.deadline,
-                              goal: entry.goal,
-                              ID: entry.ID,
-                              launched: entry.launched,
-                              main_category: entry.main_category,
-                              name: entry.name,
-                              pledged: entry.pledged,  // Must not be zero for log scale to work
-                              state: entry.state,
-                              usd_pledged: entry.usd_pledged,
-                              usd_goal_real: entry.usd_goal_real,
-                              usd_pledged_real: entry.usd_pledged_real,
-                              number_of_days : entry.number_of_days,
-                              date_range : entry.date_range,
-                              profit_rate : entry.profit_rate, // Must not be zero for log scale to work
-                              profit_range : entry.profit_range,
-                              value: 1,
-                        }
-                  )
-            }
-            else{
-                  var bool = false;
-                  for(i = 0; i < sankeyData.length; ++i)
-                  {
-
-                        if(entry[wantedCategories[0]] == sankeyData[i][wantedCategories[0]] && entry[wantedCategories[1]] == sankeyData[i][wantedCategories[1]] && entry[wantedCategories[2]] == sankeyData[i][wantedCategories[2]] && entry[wantedCategories[3]] == sankeyData[i][wantedCategories[3]] && entry[wantedCategories[4]] == sankeyData[i][wantedCategories[4]])
-                        {
-                              sankeyData[i].value += 1;
-                              bool = true;
-                              break;
-                        }
-                  }
-                  if(bool == false){
-                        sankeyData.push(
-                              {
-                                    backers: entry.backers, // Must not be zero for log scale to work
-                                    category: entry.category,
-                                    country: entry.country,
-                                    currency: entry.currency,
-                                    deadline: entry.deadline,
-                                    goal: entry.goal,
-                                    ID: entry.ID,
-                                    launched: entry.launched,
-                                    main_category: entry.main_category,
-                                    name: entry.name,
-                                    pledged: entry.pledged,  // Must not be zero for log scale to work
-                                    state: entry.state,
-                                    usd_pledged: entry.usd_pledged,
-                                    usd_goal_real: entry.usd_goal_real,
-                                    usd_pledged_real: entry.usd_pledged_real,
-                                    number_of_days : entry.number_of_days,
-                                    date_range : entry.date_range,
-                                    profit_rate : entry.profit_rate, // Must not be zero for log scale to work
-                                    profit_range : entry.profit_range,
-                                    value: 1,
-                              });
-                  }
-            }
-      });
-      var arr = [];
-      console.log(sankeyData)
-      sankeyData.forEach( item => {
-            for(id_section = 1; id_section < wantedCategories.length; id_section++ )
-            arr.push(
-                  {
-                       from: item[wantedCategories[id_section - 1]],
-                       to: item[wantedCategories[id_section]],
-                       value : item.value,
-                       id: item.ID + "-" + ((id_section % wantedCategories.length) - 1),
-                  }
-            );
-      }); // end of for loop
-      //console.log(arr)
-      return arr;
-} // end of function pssData
 
 function parseMap(data) {
   var arr = [];
@@ -262,4 +180,64 @@ function parseMap(data) {
 
   return arr;
 
+}
+
+
+function parseSankey(data){
+  var wantedCategories = ['country', 'main_category', 'date_range', 'state', 'profit'];
+  var sankeyData = [];
+  data.forEach(entry => {
+    if(sankeyData.length == 0){
+      console.log(entry)
+      sankeyData.push(
+      {
+        country : entry.country,
+        main_category : entry.main_category,
+        date_range : entry.date_range,
+        state : entry.state,
+        profit : entry.profit,
+        ID : entry.ID,
+        value : 1
+      })
+    }
+    else {
+      var bool = false;
+      for(i = 0; i < sankeyData.length; ++i)
+      {
+        if(entry[wantedCategories[0]] == sankeyData[i][wantedCategories[0]] && entry[wantedCategories[1]] == sankeyData[i][wantedCategories[1]] && entry[wantedCategories[2]] == sankeyData[i][wantedCategories[2]] && entry[wantedCategories[3]] == sankeyData[i][wantedCategories[3]] && entry[wantedCategories[4]] == sankeyData[i][wantedCategories[4]])
+        {
+          sankeyData[i].value += 1;
+          bool = true;
+          break;
+        }
+      }
+      if(bool == false){
+        sankeyData.push({
+          country : entry.country,
+          main_category : entry.main_category,
+          date_range : entry.date_range,
+          state : entry.state,
+          profit : entry.profit,
+          ID : entry.ID,
+          value : 1
+        });
+      }
+    }
+  });
+  var arr = [];
+    sankeyData.forEach( entry => {
+      for(id_section = 1; id_section < wantedCategories.length; id_section++ )
+      {
+        arr.push(
+          {
+            from: entry[wantedCategories[id_section - 1]],
+            to: entry[wantedCategories[id_section]],
+            value : entry.value,
+            id: entry.ID + "-" + ((id_section % wantedCategories.length) - 1),
+          });
+      }
+    });
+  console.log("Array:")
+  console.log(arr)
+  return arr;
 }

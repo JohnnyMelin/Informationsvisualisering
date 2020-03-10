@@ -1,8 +1,9 @@
 
-function world_map(data) {
+function world_map(data, colors) {
 
   // AUS, AUT, BEL, CAN, DNK, FRA, DEU, HKH, IRL, ITA, JPN, LUX, MEX, NZL, NOR, SGP, ESP, SWE, CHE, NLD, GBR, USA
   // This array will hold the total sum for each country
+  
   var sums = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   // This will hold how many projects there are in each country
   var frequency = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -26,11 +27,16 @@ function world_map(data) {
       responsive: false,
       // Fills define the range of data, they will have to be mapped to our data.
       fills: {
-        LOW: '#74c476',
+        LOW: colors[0],
+        MEDIUM: colors[1],
+        HIGH: colors[2],
+        UNKNOWN: colors[3],
+        defaultFill: 'gray'
+        /*LOW: '#74c476',
         MEDIUM: '#238b45',
         HIGH: '#005a32',
         UNKNOWN: '#fdd0a2',
-        defaultFill: 'gray'
+        defaultFill: 'gray'*/
       },
       data: {
         AUS: {
@@ -160,14 +166,14 @@ function world_map(data) {
       }
     }
   );
-
+/*
   var text = "Hover over a country to show more data"; 
 
   var h = document.createElement("h2");
   var t = document.createTextNode(text);
   h.appendChild(t);
   document.getElementsByClassName("datamaps-hoverover")[0].appendChild(h);
-
+*/
   // Loop over all data and update sums array accordingly
   function calcSums() {
     for(var i in data) {
@@ -185,7 +191,7 @@ function world_map(data) {
             sums[1] += parseInt(item.state_value);
             frequency[1]++;
             if(parseInt(item.state_value) == 1)
-            rate[0]++;
+            rate[1]++;
             break;
           case "BEL":
             sums[2] += parseInt(item.state_value);

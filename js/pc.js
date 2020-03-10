@@ -126,7 +126,7 @@ function pc(data) {
             document.getElementById('Backers').innerHTML = dede.backers;
             document.getElementById('Pledged').innerHTML = dede.usd_pledged_real;
             document.getElementById('Goal').innerHTML = dede.usd_goal_real;
-            document.getElementById('Profit').innerHTML = dede.profit_rate;
+            document.getElementById('Profit').innerHTML = dede.profit_rate + '%';
             })
 
 

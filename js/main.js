@@ -15,6 +15,7 @@ queue()
   .await(draw);
 
 var pss, pc, world_map, points;
+var parsed_map;
 
 function draw(error, data2, world_data, data4, sankey) {
   if (error) throw error;
@@ -26,25 +27,25 @@ function draw(error, data2, world_data, data4, sankey) {
   {
     map_data.push(world_data[i]);
   }
-  for(var i = 0; i < 1000; ++i){
+  for(var i = 0; i < 5000; ++i){
     arr.push(data2[i]);
   }
-  for(var i = 1; i < 1000; ++i){
+  for(var i = 1; i < 100; ++i){
     sankey_data.push(sankey[i]);
   }
 
   //console.log(arr);
-  var parsed_map = parseMap(map_data);
-  //var parsedData = parseData(arr); // parse the data so we have no incomplete items.
+  parsed_map = parseMap(map_data);
+  var parsedData = parseData(arr); // parse the data so we have no incomplete items.
   var parsed_sankey = parseSankey(sankey_data); // Format data so the pss can display it
   //Test different data at the end!
 
   //create_parallelCoordinates(parseData);
   //create_parallelSet(parseData);
 
-  //pc = new pc(parsedData);
+  pc = new pc(parsedData);
   pss = new pss(parsed_sankey);
-  map = new world_map(parsed_map);
+  map = new world_map(parsed_map, ['#74c476', '#238b45', '#005a32', 'yellow']);
   console.log("Code Ends");
 }
 
@@ -60,7 +61,7 @@ function numberOfDays(d){
 }
 
 
-/*function dateRange(numDays){
+function dateRange(numDays){
       if(numDays >= 50)
             return ">50 days"
       if(numDays >= 40)
@@ -89,9 +90,7 @@ function profitRange(suc){
             return "10%-25%"
 
       return "<10%";
-}*/
-
-
+}
 
 function getProfit(d){
     var test = Math.round((d.usd_pledged_real/d.usd_goal_real)*(100));
@@ -240,4 +239,26 @@ function parseSankey(data){
   console.log("Array:")
   console.log(arr)
   return arr;
+}
+
+
+// Fill all countries with default colors
+function filterDefault() {
+      colors = ['#74c476', '#238b45', '#005a32', 'yellow'];
+      map = new world_map(parsed_map, colors);
+}
+// Fill all countries with gray except high
+function filterHigh() {
+      colors = ['gray', 'gray', '#005a32', 'gray'];
+      map = new world_map(parsed_map, colors);
+}
+// Fill all countries with gray except low
+function filterLow() {
+      colors = ['#74c476', 'gray', 'gray', 'gray'];
+      map = new world_map(parsed_map, colors);
+}
+// Fill all countries with gray except med
+function filterMedium() {
+      colors = ['gray', '#238b45', 'gray', 'gray'];
+      map = new world_map(parsed_map, colors);
 }

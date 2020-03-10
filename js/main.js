@@ -27,37 +27,16 @@ function draw(error, data2, world_data, data4, sankey) {
   {
     map_data.push(world_data[i]);
   }
-<<<<<<< HEAD
-<<<<<<< HEAD
-  for(var i = 0; i < 5; ++i){
-    arr.push(data2[i]);
-  }
-  for(var i = 1; i < 5; ++i){
-=======
   for(var i = 0; i < 5000; ++i){
     arr.push(data2[i]);
   }
   for(var i = 1; i < 100; ++i){
->>>>>>> 889a03de972ec92d885872b302661fac7867155f
-=======
-  for(var i = 0; i < 5000; ++i){
-    arr.push(data2[i]);
-  }
-  for(var i = 1; i < 100; ++i){
->>>>>>> 889a03de972ec92d885872b302661fac7867155f
     sankey_data.push(sankey[i]);
   }
 
   //console.log(arr);
-<<<<<<< HEAD
-<<<<<<< HEAD
-  var parsed_map = parseMap(map_data);
-=======
+
   parsed_map = parseMap(map_data);
->>>>>>> 889a03de972ec92d885872b302661fac7867155f
-=======
-  parsed_map = parseMap(map_data);
->>>>>>> 889a03de972ec92d885872b302661fac7867155f
   var parsedData = parseData(arr); // parse the data so we have no incomplete items.
   var parsed_sankey = parseSankey(sankey_data); // Format data so the pss can display it
   //Test different data at the end!

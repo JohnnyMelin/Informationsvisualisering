@@ -19,7 +19,7 @@ var parsed_map;
 
 function draw(error, data2, world_data, data4, sankey) {
   if (error) throw error;
-  console.log("Code Starts");
+ console.log("Code Starts");
   var arr = [];
   var map_data = [];
   var sankey_data = [];

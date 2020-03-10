@@ -15,6 +15,7 @@ queue()
   .await(draw);
 
 var pss, pc, world_map, points;
+var parsed_map;
 
 function draw(error, data2, world_data, data4, sankey) {
   if (error) throw error;
@@ -26,25 +27,26 @@ function draw(error, data2, world_data, data4, sankey) {
   {
     map_data.push(world_data[i]);
   }
-  for(var i = 0; i < 1000; ++i){
+  for(var i = 0; i < 5000; ++i){
     arr.push(data2[i]);
   }
-  for(var i = 1; i < 1000; ++i){
+  for(var i = 1; i < 100; ++i){
     sankey_data.push(sankey[i]);
   }
 
   //console.log(arr);
-  var parsed_map = parseMap(map_data);
-  //var parsedData = parseData(arr); // parse the data so we have no incomplete items.
+
+  parsed_map = parseMap(map_data);
+  var parsedData = parseData(arr); // parse the data so we have no incomplete items.
   var parsed_sankey = parseSankey(sankey_data); // Format data so the pss can display it
   //Test different data at the end!
 
   //create_parallelCoordinates(parseData);
   //create_parallelSet(parseData);
 
-  //pc = new pc(parsedData);
+  pc = new pc(parsedData);
   pss = new pss(parsed_sankey);
-  map = new world_map(parsed_map);
+  map = new world_map(parsed_map, ['#74c476', '#238b45', '#005a32', 'yellow']);
   console.log("Code Ends");
 }
 
@@ -91,8 +93,6 @@ function profitRange(suc){
       return "<10%";
 }
 
-
-
 function getProfit(d){
     var test = Math.round((d.usd_pledged_real/d.usd_goal_real)*(100));
     return test;
@@ -130,9 +130,9 @@ function parseData(data){
         usd_goal_real: item.usd_goal_real == 0 ? 1 : item.usd_goal_real ,
         usd_pledged_real: item.usd_pledged_real == 0 ? 1 : item.usd_pledged_real,
         number_of_days : numberOfDays(item),
-        date_range : dateRange(numberOfDays(item)),
+        //date_range : dateRange(numberOfDays(item)),
         profit_rate : profit == 0 ? 1 : profit, // Must not be zero for log scale to work
-        profit_range : profitRange(profit),
+        //profit_range : profitRange(profit),
 
       });
     }
@@ -146,14 +146,14 @@ function parseData(data){
 function contains(array, object){
       //We wanna know where the connection already exists so that we
       //can increment that connections' value.
-      var positionInList = 0;
-      array.forEach(item => {
-            if(item.from == object.from && item.to == object.to)
-                  return positionInList;
+  var positionInList = 0;
+  array.forEach(item => {
+    if(item.from == object.from && item.to == object.to)
+      return positionInList;
 
-            positionInList++;
-      })
-      return undefined;
+    positionInList++;
+  })
+  return undefined;
 }
 
 
@@ -240,4 +240,26 @@ function parseSankey(data){
   console.log("Array:")
   console.log(arr)
   return arr;
+}
+
+
+// Fill all countries with default colors
+function filterDefault() {
+      colors = ['#74c476', '#238b45', '#005a32', 'yellow'];
+      map = new world_map(parsed_map, colors);
+}
+// Fill all countries with gray except high
+function filterHigh() {
+      colors = ['gray', 'gray', '#005a32', 'gray'];
+      map = new world_map(parsed_map, colors);
+}
+// Fill all countries with gray except low
+function filterLow() {
+      colors = ['#74c476', 'gray', 'gray', 'gray'];
+      map = new world_map(parsed_map, colors);
+}
+// Fill all countries with gray except med
+function filterMedium() {
+      colors = ['gray', '#238b45', 'gray', 'gray'];
+      map = new world_map(parsed_map, colors);
 }

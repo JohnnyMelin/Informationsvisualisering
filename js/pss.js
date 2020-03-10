@@ -30,7 +30,7 @@ function pss(dota) {
       chart.links.template.colorMode = "solid";
       chart.links.template.fill = new am4core.InterfaceColorSet().getFor("alternativeBackground");
       chart.links.template.fillOpacity = 0.1;
-      chart.links.template.showTooltipOn = "hover";
+      chart.links.template.showTooltipOn = "";
 
       // highlight all links with the same id beginning
       chart.links.template.events.on("over", function(event){

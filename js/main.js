@@ -18,7 +18,7 @@ var pss, pc, world_map, points;
 
 function draw(error, data2, world_data, data4, sankey) {
   if (error) throw error;
-  console.log("Code Starts");
+ console.log("Code Starts");
   var arr = [];
   var map_data = [];
   var sankey_data = [];
@@ -60,7 +60,7 @@ function numberOfDays(d){
 }
 
 
-/*function dateRange(numDays){
+function dateRange(numDays){
       if(numDays >= 50)
             return ">50 days"
       if(numDays >= 40)
@@ -89,7 +89,7 @@ function profitRange(suc){
             return "10%-25%"
 
       return "<10%";
-}*/
+}
 
 
 
